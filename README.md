@@ -1,3 +1,4 @@
-check for readme
-
 console log and chessboard
+=======
+# js-practice
+
