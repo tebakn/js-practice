@@ -17,3 +17,7 @@ class Firstclass{
 obj=new Firstclass('sad','qw',2,'edfw','e',3243,'sf','f',)
 obj.displaykeys()
 obj.display()
+
+let newobj= new class {constructor(type){this['a']=12,this.type=type}disp(){console.log(this)}}("unnamed")
+newobj.disp()
+console.log(Object.getPrototypeOf(Firstclass))
