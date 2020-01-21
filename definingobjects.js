@@ -21,3 +21,13 @@ obj.display()
 let newobj= new class {constructor(type){this['a']=12,this.type=type}disp(){console.log(this)}}("unnamed")
 newobj.disp()
 console.log(Object.getPrototypeOf(Firstclass))
+
+nulobj=Object.create(Object.getPrototypeOf(Function))
+console.log(Object.getPrototypeOf(nulobj))
+
+class second{
+    constructor(){
+        this.a=2
+    }
+}
+console.log(Object.getPrototypeOf(second))
