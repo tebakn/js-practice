@@ -57,3 +57,8 @@ for (let str of no) if (regexp.test(str)) {
  console.log(`Unexpected match for '${str}'`);
 }
 }
+
+//will try to add bugs and unwanted comments here;
+bfbeuei
+fefhoeifh
+//please delete these!
