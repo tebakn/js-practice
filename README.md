@@ -1,4 +1,3 @@
-console log and chessboard
-=======
-# js-practice
+# our-trialRepo
+Trial Repo for Talview Interns 2020
 
