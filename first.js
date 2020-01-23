@@ -1,1 +1,1 @@
-console.log("This is not the first program ")
+console.log("This is the first program, even the name says so");//start using semicolons
