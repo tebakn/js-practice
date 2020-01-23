@@ -18,7 +18,7 @@ else{
 
 }
 
-console.log(_.upperCase(name)); //SHREsHTH
+console.log(_.upperCase(name)); //SHRESHTH
 console.log(_.random(0,9)); //random number
 
 //create chunks of array
