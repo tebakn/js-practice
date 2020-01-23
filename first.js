@@ -1,3 +1,3 @@
-console.log("This is not the first program ")
 for(let i=0;i<8;i++)
     console.log(i);
+console.log("This is the first program, even the name says so");//use semicolons
