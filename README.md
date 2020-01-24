@@ -1,3 +1,3 @@
-# our-trialRepo
-Trial Repo for Talview Interns 2020
+# myOwn-trialRepo
+Trial Repo for Me
 
