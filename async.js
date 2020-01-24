@@ -8,9 +8,9 @@ function request(something){
     return prom=new Promise((resolve,reject)=>{
         done=false;
         function attempt(n){
-            console.log(`this is attempt ${n} with ${something.message}`);
             something.func(n,()=>{
-            //resolve(`resolve value ${done}`)
+            done=true
+            resolve(`resolve value ${done}`)
             })
                 setTimeout(()=>{
                 if (done) return;
@@ -21,8 +21,20 @@ function request(something){
         attempt(1);
     });
 }
-req=request({func:calledinpromise,message:"Hi this is request"}).then(thenval=>console.log("this"+thenval))
+
+//normal
+req=request({func:calledinpromise,message:"Hi this is request"}).then(thenval=>console.log("then "+thenval))
 .catch(err=>{if (err instanceof Timeout) console.log(err)
             else throw err})
 console.log(req)
 setTimeout(console.log,2000,req)
+
+// Async and await
+
+// async function waitforrequest(){
+//         req= await request({func:calledinpromise,message:"Hi this is request"}).then(thenval=>console.log("then "+thenval))
+//          .catch(err=>{if (err instanceof Timeout) console.log(err)
+//                      else throw err})
+//         console.log(req)    
+// }
+// waitforrequest()
