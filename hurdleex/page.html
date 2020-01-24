@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <title>My home page</title>
+  </head>
+  <script>
+    const runAsync = fn => {
+        const worker = new Worker(
+          URL.createObjectURL(new Blob([`postMessage((${fn})());`]), {
+            type: 'application/javascript; charset=utf-8'
+          })
+        );
+        return new Promise((res, rej) => {
+          worker.onmessage = ({ data }) => {
+            res(data), worker.terminate();
+          };
+          worker.onerror = err => {
+            rej(err), worker.terminate();
+          };
+        });
+      };
+     function longRunningFunction(){
+    let result = 0;
+    for (let i = 0; i < 1000; i++) {
+      for (let j = 0; j < 700; j++) {
+        for (let k = 0; k < 300; k++) {
+          result = result + i + j + k;
+        }
+      }
+    }
+    async function awaittimeout()
+{   id=await new Promise((res)=>{id=setInterval(console.log,500,result);res(id)})
+    setTimeout(clearInterval,5000,id)
+    return
+  }
+ awaittimeout()
+  return result;
+};
+      /*
+      */
+      runAsync(longRunningFunction).then(console.log); // 209685000000
+      runAsync(() => 10 ** 3).then(console.log); // 1000
+      let outsideVariable = 50;
+      runAsync(() => typeof outsideVariable).then(console.log);
+    </script>
+  <body>
+    
+    <h1>My home page</h1><!---Change some body to see effect--->
+    <p>Helland this is mzxcy home page.</p>
+    <p>I also wroteghfghgf a book! AD it
+    <a href="http://eloquentjavascript.net">here</a>.</p>
+    <button onclick="startwork()">Start Worker</button>
+    <button onclick="stopWorker()">Stop Worker</button>
+  </body>
+
+</html>
