@@ -1,3 +1,4 @@
+var mom = require('moment')
 class booked{
 
     constructor(from,to){
@@ -6,7 +7,15 @@ class booked{
     }
 
     getDuration(){
-       return this.to.getTime()-this.from.getTime()
+       return (this.to.getTime()-this.from.getTime())
+    }
+    displaybooked(tz,disp){
+        let ms = 1000*Math.round(this.getDuration()/1000); // round to nearest second
+        var d = new Date(ms);
+        let pstr=`${disp} from ${mom.utc(this.from.getTime()).utcOffset(tz).format('llll')} 
+            to ${mom.utc(this.to.getTime()).utcOffset(tz).format('llll')}  
+                          duration:- ${ d.getUTCHours() + ':' + d.getUTCMinutes()} \n`
+        console.log(pstr)
     }
 }
 
@@ -15,17 +24,29 @@ class Schedule{
     constructor(tz,...args){
         this.booking=[]
         this.deftimezone=tz
-
-        args.forEach((value)=>{
-           if (value.length!==2){
-               console.log("value error")
-           } 
-           else{
-                this.booking.push(new booked(value[0],value[1]))
-           }
-        })
+        this.addMultiBooking(...args)
     }
-
+    addMultiBooking(...books){
+        books.forEach((value)=>this.addBooking(value))
+    }
+    addBooking(book){
+        book=new booked(book[0],book[1])
+        let i=0
+        for(;i<this.booking.length;i+=1){
+            if (book.from.getTime()<=this.booking[i].from.getTime())
+                break
+        }
+        if (i===this.booking.length)
+            {this.booking.push(book)
+            //console.log(i)
+        }
+        else{
+            let temp=this.booking.slice(i)
+            this.booking=this.booking.slice(0,i)
+            this.booking.push(book)
+            this.booking=this.booking.concat(temp)
+        }
+    }
     getFreeSlots(from,to){
         let slot=[new booked(from,to)];
 
@@ -52,6 +73,17 @@ class Schedule{
         });
     return slot;
     } 
+    displaySchedule(common=null){
+        let disp="Free Slot"
+        if (common===null){
+            common=this.booking
+            disp="Booked Slot"
+        }
+        common.forEach((value)=>{
+            value.displaybooked(this.deftimezone,disp)
+        })
+
+    }
 }
 function scheduleFor(schedule1,schedule2){
 
@@ -104,10 +136,20 @@ function scheduleFor(schedule1,schedule2){
 
 candidateschedule=new Schedule("+0000",[" 25 Dec 1995 13:30:00 +0000"," 25 Dec 1995 14:30:00 +0000"]
 ,[" 25 Dec 1995 15:30:00 GMT"," 25 Dec 1995 17:30:00 GMT"])
+candidateschedule.addMultiBooking([" 25 Dec 1995 19:30:00 +0000"," 25 Dec 1995 23:30:00 +0000"],[" 25 Dec 1995 13:30:00 +0000"," 25 Dec 1995 14:00:00 +0000"])
 
-recruiterschedule=new Schedule("+0000",[" 25 Dec 1995 9:30:00 +0000"," 25 Dec 1995 12:30:00 +0000"]
+recruiterschedule=new Schedule("+0430",[" 25 Dec 1995 9:30:00 +0000"," 25 Dec 1995 12:30:00 +0000"]
 ,[" 25 Dec 1995 13:30:00 +0000"," 25 Dec 1995 15:30:00 +0000"])
 
 scheduler=scheduleFor(candidateschedule,recruiterschedule)
 commontime=scheduler(" 25 Dec 1995 7:30:00 +0000"," 25 Dec 1995 23:30:00 +0000",3600)
-console.log(commontime)
+
+
+// console.log("Recruiter Booked slots:- \n")
+// recruiterschedule.displaySchedule()
+ console.log("Candidate Booked slots:- \n")
+candidateschedule.displaySchedule()
+console.log("Common Free Slots in Recruiter time zone:- \n")
+recruiterschedule.displaySchedule(commontime)
+console.log("Common Free Slots in Candidate time zone:- \n")
+candidateschedule.displaySchedule(commontime)
